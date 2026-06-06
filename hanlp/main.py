@@ -30,6 +30,8 @@ async def lifespan(app: FastAPI):
         import hanlp
         _ner = hanlp.load(hanlp.pretrained.ner.MSRA_NER_BERT_BASE_ZH)
         logger.info("HanLP model loaded")
+        _ner(["预热"])
+        logger.info("HanLP warmup done")
     except Exception:
         logger.exception("Failed to load HanLP model")
         raise

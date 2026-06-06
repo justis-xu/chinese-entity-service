@@ -22,3 +22,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN uv pip install --system -r requirements.txt && \
     python -m spacy download zh_core_web_sm
+
+COPY . .
+
+ENV PYTHONUNBUFFERED=1
+
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers ${WORKERS:-2}

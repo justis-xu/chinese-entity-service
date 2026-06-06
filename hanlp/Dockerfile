@@ -24,3 +24,9 @@ RUN uv pip install --system -r requirements.txt
 
 ENV HANLP_HOME=/app/.hanlp
 RUN python -c "import hanlp; hanlp.load(hanlp.pretrained.ner.MSRA_NER_BERT_BASE_ZH)"
+
+COPY . .
+
+ENV PYTHONUNBUFFERED=1
+
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers ${WORKERS:-2}

@@ -30,6 +30,8 @@ async def lifespan(app: FastAPI):
         from LAC import LAC
         _lac = LAC(mode="lac")
         logger.info("LAC model loaded")
+        _lac.run(["预热"])
+        logger.info("LAC warmup done")
     except Exception:
         logger.exception("Failed to load LAC model")
         raise

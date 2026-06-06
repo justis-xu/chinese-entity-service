@@ -11,7 +11,7 @@
 | 磁盘 | 500 MB | 1 GB |
 
 - 推理延迟：~20ms（短文本）
-- 默认 2 个 worker 进程，并发无状态共享问题
+- 推荐 4 个 worker 进程，充分利用 4 核 CPU
 - 中文 NER 效果弱于 HanLP，适合英中混合文本场景
 
 ## 环境变量
@@ -36,7 +36,7 @@ docker build -t chinese-entity-spacy:latest .
 填入部署平台的启动命令字段（路径替换为平台实际挂载路径）：
 
 ```
-cd /models/<挂载路径> && uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2
+cd /models/<挂载路径> && uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
 
 ### 环境变量

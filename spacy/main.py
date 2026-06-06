@@ -30,6 +30,8 @@ async def lifespan(app: FastAPI):
         import spacy
         _nlp = spacy.load("zh_core_web_sm")
         logger.info("spaCy model loaded")
+        _nlp("预热")
+        logger.info("spaCy warmup done")
     except Exception:
         logger.exception("Failed to load spaCy model")
         raise
