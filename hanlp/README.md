@@ -24,57 +24,39 @@
 | `PORT` | `8000` | 监听端口 |
 | `HANLP_HOME` | `/app/.hanlp` | 模型存储路径，已在镜像内预置，通常无需修改 |
 
-## 部署命令
-
-### 构建镜像
+## 构建镜像
 
 ```bash
 # 首次构建会下载 BERT 模型（约 400MB），需要网络
-docker build -t chinese-entity-hanlp .
+docker build -t chinese-entity-hanlp:latest .
 ```
 
-### 启动容器
+## 部署
 
-```bash
-docker run -d \
-  --name entity-hanlp \
-  -p 8000:8000 \
-  --memory=8g \
-  --restart=unless-stopped \
-  -e WORKERS=2 \
-  -e MAX_BATCH=64 \
-  -e MAX_TEXT_LEN=2000 \
-  chinese-entity-hanlp
+### 启动命令
+
+填入部署平台的启动命令字段：
+
+```
+uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2
 ```
 
-### 调整端口
+### 环境变量
 
-```bash
-docker run -d \
-  --name entity-hanlp \
-  -p 9000:8000 \
-  --memory=8g \
-  --restart=unless-stopped \
-  chinese-entity-hanlp
+在部署平台的环境变量配置中填入：
+
+| 变量 | 推荐值 | 说明 |
+|------|--------|------|
+| `WORKERS` | `2` | worker 进程数，内存限制下建议不超过 2 |
+| `PORT` | `8000` | 监听端口 |
+| `MAX_BATCH` | `64` | 单次请求最多文本条数 |
+| `MAX_TEXT_LEN` | `2000` | 单条文本最大字符数，超出自动截断 |
+| `HANLP_HOME` | `/app/.hanlp` | 模型路径，镜像内已预置，通常无需修改 |
+
+### 健康检查路径
+
 ```
-
-### 查看日志
-
-```bash
-docker logs -f entity-hanlp
-```
-
-### 停止 / 删除
-
-```bash
-docker stop entity-hanlp
-docker rm entity-hanlp
-```
-
-### 健康检查
-
-```bash
-curl http://localhost:8000/health
+GET /health
 ```
 
 ## API

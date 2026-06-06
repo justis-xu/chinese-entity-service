@@ -22,71 +22,37 @@
 | `WORKERS` | `2` | uvicorn worker 进程数，建议不超过 CPU 核数 |
 | `PORT` | `8000` | 监听端口 |
 
-## 部署命令
-
-### 构建镜像
+## 构建镜像
 
 ```bash
-docker build -t chinese-entity-lac .
+docker build -t chinese-entity-lac:latest .
 ```
 
-### 启动容器
+## 部署
 
-```bash
-docker run -d \
-  --name entity-lac \
-  -p 8000:8000 \
-  --memory=2g \
-  --restart=unless-stopped \
-  -e WORKERS=2 \
-  -e MAX_BATCH=64 \
-  -e MAX_TEXT_LEN=2000 \
-  chinese-entity-lac
-```
+### 启动命令
 
-### 调整端口
-
-```bash
-docker run -d \
-  --name entity-lac \
-  -p 9000:8000 \       # 宿主机 9000 → 容器 8000
-  --memory=2g \
-  --restart=unless-stopped \
-  chinese-entity-lac
-```
-
-### 查看日志
-
-```bash
-docker logs -f entity-lac
-```
-
-### 停止 / 删除
-
-```bash
-docker stop entity-lac
-docker rm entity-lac
-```
-
-### 健康检查
-
-```bash
-curl http://localhost:8000/health
-```
-
-## CMD 说明
-
-Dockerfile 默认启动命令：
+填入部署平台的启动命令字段：
 
 ```
 uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2
 ```
 
-如需修改 worker 数，通过环境变量 `WORKERS` 控制，需在 Dockerfile CMD 中引用，或直接覆盖：
+### 环境变量
 
-```bash
-docker run ... chinese-entity-lac \
-  uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+在部署平台的环境变量配置中填入：
+
+| 变量 | 推荐值 | 说明 |
+|------|--------|------|
+| `WORKERS` | `2` | worker 进程数，建议不超过 CPU 核数 |
+| `PORT` | `8000` | 监听端口 |
+| `MAX_BATCH` | `64` | 单次请求最多文本条数 |
+| `MAX_TEXT_LEN` | `2000` | 单条文本最大字符数，超出自动截断 |
+
+### 健康检查路径
+
+```
+GET /health
 ```
 
 ## API
