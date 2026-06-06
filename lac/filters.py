@@ -1,22 +1,11 @@
 from __future__ import annotations
 
-# Normalize model-specific tags to a common set
+# LAC 标签：https://github.com/baidu/lac
 _TAG_NORM: dict[str, str] = {
-    # LAC
-    "PER": "PER",
-    "LOC": "LOC",
-    "ORG": "ORG",
-    "TIME": "TIME",
-    # HanLP MSRA (NR=人名, NS=地名, NT=机构名)
-    "NR": "PER",
-    "NS": "LOC",
-    "NT": "ORG",
-    # spaCy / HanLP OntoNotes
-    "PERSON": "PER",
-    "GPE": "LOC",
-    "FAC": "LOC",
-    "ORGANIZATION": "ORG",
-    "DATE": "TIME",
+    "PER": "PER",    # 人名
+    "LOC": "LOC",    # 地名
+    "ORG": "ORG",    # 机构名
+    "TIME": "TIME",  # 时间
 }
 
 ALL_TYPES = {"PER", "LOC", "ORG", "TIME"}

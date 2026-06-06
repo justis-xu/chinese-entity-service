@@ -1,22 +1,10 @@
 from __future__ import annotations
 
-# Normalize model-specific tags to a common set
+# HanLP MSRA 标签：https://hanlp.hankcs.com/docs/annotations/ner/msra.html
 _TAG_NORM: dict[str, str] = {
-    # LAC
-    "PER": "PER",
-    "LOC": "LOC",
-    "ORG": "ORG",
-    "TIME": "TIME",
-    # HanLP MSRA (NR=人名, NS=地名, NT=机构名)
-    "NR": "PER",
-    "NS": "LOC",
-    "NT": "ORG",
-    # spaCy / HanLP OntoNotes
-    "PERSON": "PER",
-    "GPE": "LOC",
-    "FAC": "LOC",
-    "ORGANIZATION": "ORG",
-    "DATE": "TIME",
+    "NR": "PER",  # 人名
+    "NS": "LOC",  # 地名
+    "NT": "ORG",  # 机构名
 }
 
 ALL_TYPES = {"PER", "LOC", "ORG", "TIME"}

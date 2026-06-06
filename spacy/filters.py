@@ -1,22 +1,12 @@
 from __future__ import annotations
 
-# Normalize model-specific tags to a common set
+# spaCy zh_core_web_sm 标签：https://spacy.io/models/zh
 _TAG_NORM: dict[str, str] = {
-    # LAC
-    "PER": "PER",
-    "LOC": "LOC",
-    "ORG": "ORG",
-    "TIME": "TIME",
-    # HanLP MSRA (NR=人名, NS=地名, NT=机构名)
-    "NR": "PER",
-    "NS": "LOC",
-    "NT": "ORG",
-    # spaCy / HanLP OntoNotes
-    "PERSON": "PER",
-    "GPE": "LOC",
-    "FAC": "LOC",
-    "ORGANIZATION": "ORG",
-    "DATE": "TIME",
+    "PERSON": "PER",  # 人名
+    "GPE": "LOC",     # 地缘政治实体（国家、城市等）
+    "FAC": "LOC",     # 设施（建筑、场所等）
+    "ORG": "ORG",     # 机构名
+    "DATE": "TIME",   # 时间日期
 }
 
 ALL_TYPES = {"PER", "LOC", "ORG", "TIME"}
