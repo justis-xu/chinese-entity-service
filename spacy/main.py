@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from typing import Optional
 
@@ -12,8 +13,8 @@ from filters import filter_entities
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-MAX_BATCH = 64
-MAX_TEXT_LEN = 2000
+MAX_BATCH = int(os.getenv("MAX_BATCH", "64"))
+MAX_TEXT_LEN = int(os.getenv("MAX_TEXT_LEN", "2000"))
 
 _nlp = None
 

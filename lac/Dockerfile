@@ -13,7 +13,9 @@ RUN python -c "from LAC import LAC; LAC(mode='lac')"
 COPY . .
 
 ENV PYTHONUNBUFFERED=1
+ENV WORKERS=2
+ENV PORT=8000
 
 EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT --workers $WORKERS

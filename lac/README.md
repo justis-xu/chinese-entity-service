@@ -13,14 +13,80 @@
 - 推理延迟：~5ms（短文本）
 - 默认 2 个 worker 进程，并发无状态共享问题
 
-## 构建与启动
+## 环境变量
+
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| `MAX_BATCH` | `64` | 单次请求最多文本条数 |
+| `MAX_TEXT_LEN` | `2000` | 单条文本最大字符数，超出自动截断 |
+| `WORKERS` | `2` | uvicorn worker 进程数，建议不超过 CPU 核数 |
+| `PORT` | `8000` | 监听端口 |
+
+## 部署命令
+
+### 构建镜像
 
 ```bash
-# 单独构建
 docker build -t chinese-entity-lac .
+```
 
-# 单独运行
-docker run -p 8000:8000 --memory=2g chinese-entity-lac
+### 启动容器
+
+```bash
+docker run -d \
+  --name entity-lac \
+  -p 8000:8000 \
+  --memory=2g \
+  --restart=unless-stopped \
+  -e WORKERS=2 \
+  -e MAX_BATCH=64 \
+  -e MAX_TEXT_LEN=2000 \
+  chinese-entity-lac
+```
+
+### 调整端口
+
+```bash
+docker run -d \
+  --name entity-lac \
+  -p 9000:8000 \       # 宿主机 9000 → 容器 8000
+  --memory=2g \
+  --restart=unless-stopped \
+  chinese-entity-lac
+```
+
+### 查看日志
+
+```bash
+docker logs -f entity-lac
+```
+
+### 停止 / 删除
+
+```bash
+docker stop entity-lac
+docker rm entity-lac
+```
+
+### 健康检查
+
+```bash
+curl http://localhost:8000/health
+```
+
+## CMD 说明
+
+Dockerfile 默认启动命令：
+
+```
+uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2
+```
+
+如需修改 worker 数，通过环境变量 `WORKERS` 控制，需在 Dockerfile CMD 中引用，或直接覆盖：
+
+```bash
+docker run ... chinese-entity-lac \
+  uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
 
 ## API
@@ -40,7 +106,7 @@ docker run -p 8000:8000 --memory=2g chinese-entity-lac
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| texts | string[] | 是 | 待提取文本，最多 64 条 |
+| texts | string[] | 是 | 待提取文本，最多 `MAX_BATCH` 条 |
 | types | string[] | 否 | 过滤实体类型，不传返回全部 |
 
 支持的类型：
