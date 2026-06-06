@@ -8,8 +8,6 @@ COPY requirements.txt .
 RUN uv pip install --system --no-cache -r requirements.txt && \
     python -m spacy download zh_core_web_sm
 
-COPY . .
-
 ENV PYTHONUNBUFFERED=1
 ENV WORKERS=2
 ENV PORT=8000

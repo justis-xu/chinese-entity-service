@@ -10,8 +10,6 @@ RUN uv pip install --system --no-cache -r requirements.txt
 # 构建时预下载模型，避免运行时下载
 RUN python -c "from LAC import LAC; LAC(mode='lac')"
 
-COPY . .
-
 ENV PYTHONUNBUFFERED=1
 ENV WORKERS=2
 ENV PORT=8000
