@@ -1,8 +1,8 @@
 services:
   lac:
     build:
-      context: .
-      dockerfile: lac/Dockerfile
+      context: ./lac
+      dockerfile: Dockerfile
     ports:
       - "8001:8000"
     mem_limit: 2g
@@ -16,8 +16,8 @@ services:
 
   hanlp:
     build:
-      context: .
-      dockerfile: hanlp/Dockerfile
+      context: ./hanlp
+      dockerfile: Dockerfile
     ports:
       - "8002:8000"
     mem_limit: 8g
@@ -31,8 +31,8 @@ services:
 
   spacy:
     build:
-      context: .
-      dockerfile: spacy/Dockerfile
+      context: ./spacy
+      dockerfile: Dockerfile
     ports:
       - "8003:8000"
     mem_limit: 2g

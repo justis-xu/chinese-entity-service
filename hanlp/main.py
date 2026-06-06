@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 import logging
-import sys
 from contextlib import asynccontextmanager
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-sys.path.insert(0, "/app")
-from shared.filters import filter_entities
+from filters import filter_entities
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")

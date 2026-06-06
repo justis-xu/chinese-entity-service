@@ -4,15 +4,13 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 WORKDIR /app
 
-# 依赖先装，利用 Docker 层缓存
-COPY lac/requirements.txt ./lac/requirements.txt
-RUN uv pip install --system --no-cache -r lac/requirements.txt
+COPY requirements.txt .
+RUN uv pip install --system --no-cache -r requirements.txt
 
-# 构建时预下载模型，避免运行时下载失败
+# 构建时预下载模型，避免运行时下载
 RUN python -c "from LAC import LAC; LAC(mode='lac')"
 
-COPY shared/ ./shared/
-COPY lac/main.py ./main.py
+COPY . .
 
 ENV PYTHONUNBUFFERED=1
 
