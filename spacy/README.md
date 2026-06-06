@@ -33,10 +33,10 @@ docker build -t chinese-entity-spacy:latest .
 
 ### 启动命令
 
-填入部署平台的启动命令字段：
+填入部署平台的启动命令字段（路径替换为平台实际挂载路径）：
 
 ```
-uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2
+cd /models/<挂载路径> && uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2
 ```
 
 ### 环境变量
