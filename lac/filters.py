@@ -8,6 +8,7 @@ _TAG_NORM: dict[str, str] = {
     "TIME": "TIME",  # 时间
 }
 
+# 统一输出类型：PER=人名 LOC=地名 ORG=机构名 TIME=时间
 ALL_TYPES = {"PER", "LOC", "ORG", "TIME"}
 MIN_LEN = 2
 
