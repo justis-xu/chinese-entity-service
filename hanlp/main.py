@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import threading
 from contextlib import asynccontextmanager
 from typing import Optional
 
@@ -15,8 +16,10 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 
 MAX_BATCH = int(os.getenv("MAX_BATCH", "64"))
 MAX_TEXT_LEN = int(os.getenv("MAX_TEXT_LEN", "2000"))
+INFER_TIMEOUT = float(os.getenv("INFER_TIMEOUT", "10.0"))
 
 _ner = None
+_semaphore = threading.Semaphore(1)
 
 
 @asynccontextmanager
@@ -60,14 +63,19 @@ def extract(req: ExtractRequest):
 
     texts = [t[:MAX_TEXT_LEN] for t in req.texts]
 
+    if not _semaphore.acquire(timeout=INFER_TIMEOUT):
+        raise HTTPException(status_code=429, detail="Too many requests")
     try:
-        # HanLP NER: results[i] = [(text, tag, start, end), ...]
         results = _ner(texts)
         entities = []
         for sent_entities in results:
             tagged = [(text, tag) for text, tag, *_ in sent_entities]
             entities.append(filter_entities(tagged, req.types))
         return ExtractResponse(entities=entities)
+    except HTTPException:
+        raise
     except Exception:
         logger.exception("Extraction failed")
         raise HTTPException(status_code=500, detail="Extraction failed")
+    finally:
+        _semaphore.release()
