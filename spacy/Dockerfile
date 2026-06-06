@@ -21,7 +21,8 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN uv pip install --system -r requirements.txt && \
-    python -m spacy download zh_core_web_sm
+    python -m spacy download zh_core_web_sm && \
+    python -m spacy download zh_core_web_lg
 
 COPY . .
 

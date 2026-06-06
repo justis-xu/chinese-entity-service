@@ -1,11 +1,13 @@
 services:
-  lac:
+  spacy-sm:
     build:
-      context: ./lac
+      context: ./spacy
       dockerfile: Dockerfile
+    environment:
+      - SPACY_MODEL=zh_core_web_sm
     ports:
       - "8001:8000"
-    mem_limit: 2g
+    mem_limit: 1g
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -14,28 +16,15 @@ services:
       retries: 3
       start_period: 60s
 
-  hanlp:
-    build:
-      context: ./hanlp
-      dockerfile: Dockerfile
-    ports:
-      - "8002:8000"
-    mem_limit: 8g
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 120s
-
-  spacy:
+  spacy-lg:
     build:
       context: ./spacy
       dockerfile: Dockerfile
+    environment:
+      - SPACY_MODEL=zh_core_web_lg
     ports:
-      - "8003:8000"
-    mem_limit: 2g
+      - "8002:8000"
+    mem_limit: 4g
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]

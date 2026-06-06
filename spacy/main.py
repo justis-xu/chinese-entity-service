@@ -25,10 +25,11 @@ _semaphore = threading.Semaphore(1)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global _nlp
-    logger.info("Loading spaCy model...")
     try:
         import spacy
-        _nlp = spacy.load("zh_core_web_sm")
+        model = os.getenv("SPACY_MODEL", "zh_core_web_lg")
+        logger.info("Loading spaCy model: %s", model)
+        _nlp = spacy.load(model)
         logger.info("spaCy model loaded")
         _nlp("预热")
         logger.info("spaCy warmup done")
@@ -55,7 +56,7 @@ class ExtractResponse(BaseModel):
 def health():
     if _nlp is None:
         raise HTTPException(status_code=503, detail="Model not ready")
-    return {"status": "ok", "model": "spacy"}
+    return {"status": "ok", "model": os.getenv("SPACY_MODEL", "zh_core_web_lg")}
 
 
 @app.post("/extract", response_model=ExtractResponse)
