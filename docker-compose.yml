@@ -1,0 +1,45 @@
+services:
+  lac:
+    build:
+      context: .
+      dockerfile: lac/Dockerfile
+    ports:
+      - "8001:8000"
+    mem_limit: 2g
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  hanlp:
+    build:
+      context: .
+      dockerfile: hanlp/Dockerfile
+    ports:
+      - "8002:8000"
+    mem_limit: 8g
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+
+  spacy:
+    build:
+      context: .
+      dockerfile: spacy/Dockerfile
+    ports:
+      - "8003:8000"
+    mem_limit: 2g
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
